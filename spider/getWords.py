@@ -22,7 +22,7 @@ logger.addHandler(fh)
 logger.addHandler(sh)
 
 BASEURL = 'https://www.shanbay.com'
-BOOKURL = 'https://www.shanbay.com/wordbook/6091/'
+BOOKURL = 'https://www.shanbay.com/wordbook/4/'
 
 # 获取指定单词书中的分组
 r = requests.get(BOOKURL)
@@ -39,7 +39,7 @@ time.sleep(5)
 page_count = [math.ceil(int(re.search(r'\d+', item.text).group(0)) / 20) for
               item in soup.select('.wordbook-wordlist-count')]
 
-for group_index in range(15, len(group_list)):
+for group_index in range(len(group_list)):
     for i in range(1, page_count[group_index] + 1):
         r = requests.get(BASEURL + group_list[group_index] + '?page=' + str(i))
         if r.status_code != 200:
@@ -51,7 +51,7 @@ for group_index in range(15, len(group_list)):
             definitions = [item.text for item in soup.select(
                 'td.span10')]
             word_dict = {}
-            with open('CET4.txt', 'a') as f:
+            with open('TOEFL.json', 'a') as f:
                 for j in range(len(words)):
                     word_dict[words[j]] = definitions[j]
                 json.dump(word_dict, f, ensure_ascii=False)
