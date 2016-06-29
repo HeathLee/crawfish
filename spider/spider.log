@@ -771,3 +771,5 @@
 2016-06-28 22:09:50,993 - spider_logger - INFO - Get https://www.shanbay.com/wordlist/4/62920/?page=9 succeeded
 2016-06-28 22:09:56,279 - spider_logger - INFO - Get https://www.shanbay.com/wordlist/4/62920/?page=10 succeeded
 2016-06-28 22:10:01,532 - spider_logger - INFO - Get https://www.shanbay.com/wordlist/4/62923/?page=1 succeeded
+2016-06-29 23:48:53,318 - spider_logger - INFO - Get book succeeded
+2016-06-29 23:48:58,666 - spider_logger - INFO - Get https://www.shanbay.com/wordlist/4/62851/?page=1 succeeded
