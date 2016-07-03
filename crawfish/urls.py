@@ -15,8 +15,15 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
+from crawfish import views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^accounts/', include('users.urls')),
+    url(r'^index$', views.index, name='index'),
+    url(r'^set_level$', views.set_level),
+    url(r'^set_word_limit$', views.set_word_limit),
+    url(r'^bdc', views.bdc),
+    url(r'^get_sentence', views.get_sentence),
+    url(r'^finished_today$', views.finished_today)
 ]

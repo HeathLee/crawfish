@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
+{% load staticfiles %}
 <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <meta charset="utf-8">
@@ -9,9 +11,12 @@
 
     <title>Crawfish</title>
 
+    <script src="//cdn.bootcss.com/jquery/3.0.0/jquery.min.js"></script>
+{#    <script src="{% static 'crawfish/js/index.js' %}"></script>#}
+
     <!-- Le styles -->
     <link rel="icon" type="image/png"
-          href="https://static.baydn.com/static/img/shanbay_favicon.png"/>
+          href="{% static 'images/crowfish2.png' %}"/>
 
     <link rel="stylesheet" type="text/css"
           href="https://static.baydn.com/static/css/shanbay/jquery.noty.css"/>
@@ -20,17 +25,10 @@
     <link rel="stylesheet" type="text/css"
           href="https://static.baydn.com/static/css/datepicker.css"/>
 
-    <!--
-    comment out the 'shanbay_base_css' stylesheet
-    -->
-
-
-    <link type="text/css" rel="stylesheet"
-          href="https://static.baydn.com/static/css/orgchart.css"/>
-    <link href="https://static.baydn.com/static/css/shanbay.c7dfa2a0ba90991538f9283474281e38.css"
-          rel="stylesheet" type="text/css"/>
-    <link href="https://static.baydn.com/static/css/review.d7a86c9ea43c4a2fe8e36eb9606391cf.css"
-          rel="stylesheet" type="text/css"/>
+    <link type="text/css" rel="stylesheet" href=
+            {% static 'crawfish/css/shanbay.css' %}>
+    <link type="text/css" rel="stylesheet" href=
+            {% static 'crawfish/css/cover.css' %}>
     <!--[if (lt IE 9) & (!IEMobile)]>
     <link href="https://static.baydn.com/static/css/shanbay-ie.93c2a39c861c3648a2ba039c3e478dbb.css" rel="stylesheet" type="text/css" />
     <![endif]-->
@@ -51,36 +49,16 @@
 <div id="main-navbar" class="navbar navbar-fixed-top ">
     <div class="navbar-inner" style='filter: none'>
         <div class="container">
-
             <a class="brand" href="/"><img
-                    src="../assets/image/crowfish2.png"/></a>
-
-            <div class="nav-collapse">
-
-                <ul class="nav" style="z-index: 1040">
-
-                    <li class="dropdown main-nav home ">
-                        <a class="main-menu" href="/">首页</a>
-                    </li>
-                </ul>
-
-                <form class="navbar-search pull-right" action="">
-                    <div class="controls">
-                        <div class="input-prepend">
-                            <input type="text" class="search-input span2"
-                                   placeholder="查词"/>
-                            <img src="https://static.baydn.com/static/img/icon-remove.png"
-                                 class="icon-remove hide"/>
-                            <span class="add-on search-submited"><i
-                                    class="icon-search"></i></span>
-                        </div>
-                    </div>
-                </form>
-            </div>
+                    src={% static 'images/crowfish2.png' %}></a>
         </div>
     </div>
 </div>
 
-<div class="container main-body "></div>
+<div class="container main-body ">
+    {% block mainbody %}
+    
+    {% endblock %}
+</div>
 </body>
 </html>

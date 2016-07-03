@@ -1,0 +1,11 @@
+.col-sm-2 {
+    position: relative;
+    min-height: 1px;
+    padding-right: 15px;
+    padding-left: 15px;
+    font-weight: 700;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}

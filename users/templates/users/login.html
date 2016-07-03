@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block mainbody %}
+    <div id="login-form" class="hide" style="display: block;">
+        <div class="row">
+            <div class="span6">
+                <p class="form-title">登录</p>
+            </div>
+            <div class="span6">
+                <p class="third-party-title">无法登录？</p>
+                <p></p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="login-box account-box span6">
+                <form action=""
+                      method="post" class="account-form" id="loginform">
+                    {% csrf_token %}
+                    <div id="" class="">
+                        <p>
+                            <label for="id_username">邮箱：</label>
+                            <input class="text-input" id="id_username"
+                                   name="username" type="text">
+                            <span
+                                    class="add-on-icon visible-desktop">
+                                <i class="icon-user"></i>
+                            </span>
+                        </p>
+                        <p>
+                            <label for="id_password">密码：</label>
+                            <input
+                                    class="text-input" id="id_password"
+                                    name="password" type="password">
+                            <span
+                                    class="add-on-icon visible-desktop">
+                                <i class="icon-lock"></i>
+                            </span>
+                        </p>
+                    </div>
+                    <div class="clear"></div>
+                    <div class="login-buttons">
+                        <button type="submit" class="btn btn-success">
+                            登录
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="span6 social-login-box visible-desktop">
+                <div class="row">
+                    <div class="span3">
+                        <p><a href="{% url 'users_password_reset' %}">忘记密码</a></p>
+                        <p><a href="{% url 'users_register' %}">注册</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <input type="hidden" name="next" value="{{ next }}"/>
+
+{% endblock %}

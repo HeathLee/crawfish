@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block mainbody %}
+    <div id="review">
+        <div class="hero-unit start-review new-start-review">
+            <div class="row new-review-summary">
+                <div class="span3">
+                    <div class="row-fluid">
+                        <button data="CET4" class="span10 btn-large btn-success
+                        start-review-button">
+                            CET4
+                        </button>
+                    </div>
+                </div>
+                <div class="span3">
+                    <div class="row-fluid">
+                        <button data="CET6" class="span10 btn-large
+                        btn-success start-review-button">
+                            CET6
+                        </button>
+                    </div>
+                </div>
+                <div class="span3">
+                    <div class="row-fluid">
+                        <button data="TOEFL" class="span10 btn-large
+                        btn-success
+                        start-review-button">
+                            TOEFL
+                        </button>
+                    </div>
+                </div>
+                <div class="span3">
+                    <div class="row-fluid">
+                        <button data="IELTS" class="span10 btn-large
+                        btn-success
+                        start-review-button">
+                            IELTS
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{% static 'crawfish/js/set_level.js' %}"></script>
+{% endblock %}

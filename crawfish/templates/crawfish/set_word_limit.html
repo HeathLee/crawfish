@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block mainbody %}
+    <div id="review">
+        <div class="hero-unit start-review new-start-review">
+            <div class="row new-review-summary">
+                <form action="/set_word_limit" method="post">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="span6">
+                            <br><span class="helptext">每日学习量</span>
+                            <select id="word_limit" name="word_limit">
+                                <option value="20" selected="selected">20
+                                </option>
+                                <option value="50">50</option>
+                                <option value="70">70</option>
+                                <option value="100">100</option>
+                            </select>
+                        </div>
+                        <p></p>
+                        <p></p>
+                        <div class="span3">
+                            <div class="row-fluid">
+                                <button class="span12 btn-large btn-success"
+                                        type="submit">
+                                    确定
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
