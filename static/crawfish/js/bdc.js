@@ -9,7 +9,7 @@
         $(this).tab('show')
     })
 
-    $('.note-user-box-tab').click(function (e) {
+    $('#create-note').click(function (e) {
         e.preventDefault()
         $(this).tab('show')
     })
@@ -37,4 +37,6 @@
         }, 'json')
         count += 1;
     })
+
+
 }(jQuery)

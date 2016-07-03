@@ -63,7 +63,7 @@ class User(AbstractUser):
     cet6_offset = models.IntegerField(default=0)
     ielts_offset = models.IntegerField(default=0)
     toefl_offset = models.IntegerField(default=0)
-    today_offset = models.IntegerField(default=0)
+    # today_offset = models.IntegerField(default=0)
     current_level = models.CharField(max_length=10, null=True)
     word_limit = models.IntegerField(default=20)
     remark = models.TextField()

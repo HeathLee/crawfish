@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.forms.models import model_to_dict
 
 import json
@@ -81,16 +81,22 @@ def set_word_limit(request):
 @login_required
 def bdc(request):
     user = request.user
-    user.today = 0
     level = Level.objects.get(pk=user.current_level)
     offset = model_to_dict(user)[level.name.lower() + '_offset']
-    word_ids = LevelWord.objects.filter(level_id=level.id)[offset: user.word_limit]
+
+    # 完成一本书的学习
+    if offset > LevelWord.objects.filter(level_id=level.id).count():
+        return HttpResponseRedirect('/finished_book')
+
+    word_ids = LevelWord.objects.filter(level_id=level.id)[
+               offset: offset + user.word_limit]
     # Don't support
     # words = Word.objects.filter(pk__in=word_ids)
     words = []
     for word_id in word_ids:
         word = Word.objects.get(pk=word_id.word_id)
-        words.append({'content': word.content, 'cn_definition': word.cn_definition})
+        words.append(
+            {'content': word.content, 'cn_definition': word.cn_definition})
 
     return render(request, 'crawfish/bdc.html', {'words': words})
 
@@ -112,17 +118,25 @@ def get_sentence(request):
         if page.status_code == 200:
             soup = BeautifulSoup(page.text, 'lxml')
             sentence = str(soup.select('#learning-examples-box')[0])
+            if hasattr(request.user, 'today'):
+                request.user.today += 1
             return HttpResponse(json.dumps({'sentence': sentence}))
 
 
 @login_required
 def finished_today(request):
     user = request.user
-    if hasattr(user, 'today'):
-        if user.today == user.word_limit:
-            level = Level.objects.get(pk=user.current_level).name.lower() + \
-                    '_offset'
-            setattr(user, level, getattr(user, level) + user.word_limit)
-            user.save()
+    level = Level.objects.get(pk=user.current_level).name.lower() + '_offset'
+    setattr(user, level, getattr(user, level) + user.word_limit)
+    user.save()
+    return render(request, 'crawfish/finished_today.html')
 
-            return render(request, 'crawfish/finished_today.html')
+'''
+近义词eb4e57bb2c34032da68dfeb3a0578b68
+'''
+
+# TODO
+# 考虑返回的数据增加单词id
+# 笔记增删查改
+# logout
+# 开始学习有bug

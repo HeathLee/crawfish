@@ -18,6 +18,7 @@ from django.contrib import admin
 from crawfish import views
 
 urlpatterns = [
+    url(r'^$', views.index),
     url(r'^admin/', admin.site.urls),
     url(r'^accounts/', include('users.urls')),
     url(r'^index$', views.index, name='index'),
