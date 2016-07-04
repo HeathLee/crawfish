@@ -131,12 +131,44 @@ def finished_today(request):
     user.save()
     return render(request, 'crawfish/finished_today.html')
 
+
+@login_required
+@csrf_protect
+def add_note(request):
+    word_id = request.POST.get('word_id', '')
+    content = request.POST.get('content')
+    user_id = request.user.id
+
+    note = Note()
+    note.user_id = user_id
+    note.word_id = word_id
+    note.content = content
+    note.save()
+
+    # 添加笔记后 ，ajax在判断成功响应后，直接用前端内容异步append笔记，
+    return HttpResponse(json.dumps({'code': 0, 'note_id': note.id}))
+
+@login_required
+@csrf_protect
+def edit_note(request):
+    note_id = request.POST.get('note_id', '')
+    content = request.POST.get('content', '')
+
+    Note.objects.get(pk=note_id).update(content=content)
+
+    # 添加笔记后 ，ajax在判断成功响应后，直接用前端内容异步append笔记，
+    return HttpResponse(json.dumps({'code': 0, 'note_id': note_id}))
+
+
+
 '''
 近义词eb4e57bb2c34032da68dfeb3a0578b68
 '''
 
 # TODO
-# 考虑返回的数据增加单词id
+# 返回的数据增加单词id, 扇贝id
 # 笔记增删查改
 # logout
 # 开始学习有bug
+# django日志
+
