@@ -1,19 +1,4 @@
 weblog/*.log
 .idea/
-将删除 .idea/workspace.xml
-将删除 crawfish/__pycache__/
-将删除 crawfish/migrations/0001_initial.py
-将删除 crawfish/migrations/0004_auto_20160702_2259.py
-将删除 crawfish/migrations/0005_word_shanbay_id.py
-将删除 crawfish/migrations/0006_note_user_name.py
-将删除 crawfish/migrations/__init__.py
-将删除 crawfish/migrations/__pycache__/
-将删除 users/__pycache__/
-将删除 users/migrations/0003_auto_20160701_2219.py
-将删除 users/migrations/0004_auto_20160702_2259.py
-将删除 users/migrations/0005_auto_20160704_2119.py
-将删除 users/migrations/__pycache__/
-将删除 users/templatetags/__pycache__/
-将删除 weblog/all.log
-将删除 weblog/error.log
-将删除 weblog/script.log
+crawfish/migrations/*.py
+users/migrations/*.py
