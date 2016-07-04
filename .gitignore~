@@ -2,4 +2,3 @@ weblog/*.log
 .idea/
 crawfish/migrations/*.py
 users/migrations/*.py
-*.pyc
