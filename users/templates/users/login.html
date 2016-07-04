@@ -13,7 +13,7 @@
         </div>
         <div class="row">
             <div class="login-box account-box span6">
-                <form action=""
+                <form action="/accounts/login/?next=/index"
                       method="post" class="account-form" id="loginform">
                     {% csrf_token %}
                     <div id="" class="">
@@ -36,6 +36,7 @@
                                 <i class="icon-lock"></i>
                             </span>
                         </p>
+                        <input type="hidden" name="next" value="/index"/>
                     </div>
                     <div class="clear"></div>
                     <div class="login-buttons">
@@ -48,13 +49,13 @@
             <div class="span6 social-login-box visible-desktop">
                 <div class="row">
                     <div class="span3">
-                        <p><a href="{% url 'users_password_reset' %}">忘记密码</a></p>
+{#                        <p><a href="{% url 'users_password_reset' %}">忘记密码</a></p>#}
                         <p><a href="{% url 'users_register' %}">注册</a></p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <input type="hidden" name="next" value="{{ next }}"/>
+
 
 {% endblock %}

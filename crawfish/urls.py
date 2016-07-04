@@ -21,10 +21,12 @@ urlpatterns = [
     url(r'^$', views.index),
     url(r'^admin/', admin.site.urls),
     url(r'^accounts/', include('users.urls')),
-    url(r'^index$', views.index, name='index'),
-    url(r'^set_level$', views.set_level),
-    url(r'^set_word_limit$', views.set_word_limit),
-    url(r'^bdc', views.bdc),
+    url(r'^index/$', views.index, name='index'),
+    url(r'^set_level/$', views.set_level),
+    url(r'^set_word_limit/$', views.set_word_limit),
+    url(r'^bdc/$', views.bdc),
     url(r'^get_sentence', views.get_sentence),
-    url(r'^finished_today$', views.finished_today)
+    url(r'^finished_today/$', views.finished_today),
+    url(r'^add_note$', views.add_note),
+    url(r'^delete_note$', views.delete_note),
 ]

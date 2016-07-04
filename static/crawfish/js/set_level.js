@@ -2,7 +2,7 @@
 !function ($) {
     $('.span10').on('click', function () {
         level = $(this).attr('data');
-        $.post('/set_level',
+        $.post('/set_level/',
             {
                 level: level
             },

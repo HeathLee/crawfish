@@ -21,6 +21,8 @@ class Word(models.Model):
     ctime = models.DateTimeField(auto_now_add=True)
     # 修改时间
     mtime = models.DateTimeField(auto_now=True)
+    # 扇贝id
+    shanbay_id = models.IntegerField(null=True)
     remark = models.TextField(null=True)
 
     class Meta:
@@ -51,6 +53,7 @@ class Note(models.Model):
     id = models.AutoField(primary_key=True)
     user_id = models.IntegerField()
     word_id = models.IntegerField()
+    user_name = models.CharField(max_length=30, null=True)
     content = models.TextField()
     ctime = models.DateTimeField(auto_now_add=True)
     mtime = models.DateTimeField(auto_now=True)

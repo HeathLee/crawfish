@@ -1,7 +1,9 @@
 # -*-coding:utf8-*-
 
 import json
-import sys,os
+import sys
+import os
+
 sys.path.append('/home/heath/PycharmProjects/crawfish')
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "crawfish.settings")
 

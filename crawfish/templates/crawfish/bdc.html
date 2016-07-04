@@ -3,38 +3,50 @@
 
 {% block mainbody %}
     <div class="row divide-against-progress">
-    <div id="review" class="span12">
-        <div id="learning-box" class="review-id row" data-id="35848873843">
-            <div class="test-box span12 learning-detail-container">
-                <div id="learning_word" class="row">
+        <div id="review" class="span12">
+            <div id="learning-box" class="review-id row" data-id="35848873843">
+                <div class="test-box span12 learning-detail-container">
 
-                    <div class="word span10">
-                        <div class="row">
-                            <div class="span1"><h6 class="pull-right">
-                                &nbsp;</h6></div>
-                            <div class="span9">
-                                <h1 id="word-content" class="content pull-left"
-                                    style=""></h1>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="span1"><h6 class="pull-right">
-                                单词解释</h6></div>
-                            <div id="review-definitions" class="span9">
-                                <div class="well">
-                                    <div class="row">
-                                        <div class="cndf span7">
-                                            <span id="cn_definition"
-                                                  class="text"></span>
-                                        </div>
-                                    </div>
+                    <div id="learning_word" class="row">
+                        <div class="word span10">
+                            <div class="row">
+                                <div class="span1"><h6 class="pull-right">
+                                    &nbsp;</h6>
+                                </div>
+                                <div class="span9">
+                                    <h1 word-id="" shanbay-id=""
+                                        id="word-content"
+                                        class="content
+                                pull-left"
+                                        style="">
 
+                                    </h1>
                                 </div>
                             </div>
+                            <div class="row">
+                                <div class="span1"><h6 class="pull-right">
+                                    单词解释</h6></div>
+                                <div id="review-definitions" class="span9">
+                                    <div class="well">
+                                        <div class="row">
+                                            <div class="cndf span7">
+                                            <span id="cn_definition"
+                                                  class="text"></span>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="cliparts" class="span2"></div>
                         </div>
-
-
-                        <div id="cliparts" class="span2"></div>
+                    </div>
+                    <div id="roots" class="row">
+                        <div class="span1"><h6 class="pull-right">近义词 </h6>
+                        </div>
+                        <div class="roots-due-wrapper span9">
+                            <div class="due_msg alert" id="synonyms"></div>
+                        </div>
                     </div>
                     <div id="affix" class="row"></div>
                     <div id="notes-box" class="row">
@@ -53,14 +65,14 @@
                             <div class="tab-content">
                                 <div class="tab-pane row active"
                                      id="note-mine-box">
-                                    <ol class="span9"></ol>
+                                    <ol class="span9" id="self-notes-ol"></ol>
                                     <div class="holder hide">
                                         <ul class="note-mine-box-pagination"></ul>
                                     </div>
                                 </div>
                                 <div class="tab-pane row" id="note-user-box">
-                                    <ol class="span9">
-                                        <div class="null">暂时还没有共享笔记哦</div>
+                                    <ol class="span9" id="other-notes-ol">
+
                                     </ol>
                                     <div class="holder hide">
                                         <ul class="note-user-box-pagination"></ul>
@@ -73,20 +85,26 @@
                                         </div>
                                     </div>
                                     <div class="content">
-                                        <form id="make-note" method="POST"><p
-                                                id="error" class="msg hide">
-                                            笔记不能为空 </p>
-                                            <p id="msg-success"
-                                               class="msg hide">
-                                                <span>你的笔记创建成功</span> <a
-                                                    href="javascript:void(0)">请查阅</a>
+                                        <form id="make-note" method="POST"
+                                              action="/add_note">
+                                            <p id="error" class="msg hide">
+                                                笔记不能为空 </p>
+                                            <p id="msg-success" class="msg
+                                            hide">
+                                                <span>你的笔记创建成功</span>
+                                                <a href="javascript:void(0)">
+                                                    请查阅
+                                                </a>
                                             </p>
-                                            <textarea name="note" class="span7"
-                                                      rows="3"></textarea> <span
-                                                    class="loading hide">&nbsp;</span>
-                                            <div class=""><input type="submit"
-                                                                 class="btn"
-                                                                 value="添加">
+                                            <textarea id="add-note-text"
+                                                      name="note"
+                                                      class="span7"
+                                                      rows="3"></textarea>
+                                            <span class="loading hide">&nbsp;</span>
+                                            <div class="">
+                                                <input id="add-note"
+                                                       type="submit"
+                                                       class="btn" value="添加">
                                             </div>
                                         </form>
                                     </div>
@@ -102,15 +120,20 @@
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
     <script type="text/javascript">
         var data = {
-            'words': {{ words|safe }}
+            'words': {{ words|safe }},
+            'self_notes': {{ self_notes|safe }},
+            'others_notes': {{ others_notes|safe }}
         };
     </script>
     <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
     <script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     <script src="{% static 'crawfish/js/bdc.js' %}"></script>
 {% endblock %}
+
+

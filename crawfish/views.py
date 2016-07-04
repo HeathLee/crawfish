@@ -5,10 +5,13 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.forms.models import model_to_dict
 
 import json
+import logging
 import requests
 from bs4 import BeautifulSoup
 
 from crawfish.models import *
+
+logger=logging.getLogger("crawfish.views")
 
 
 @login_required
@@ -27,7 +30,8 @@ def set_level(request):
         try:
             level_name = request.POST.get('level', '')
         except Exception as e:
-            print(e)
+            logger.error('get level name failed')
+            logger.error(e)
             return HttpResponse(json.dumps({'code': 1}))
 
         if level_name == '':
@@ -38,9 +42,10 @@ def set_level(request):
             user = request.user
             user.current_level = level.id
             user.save()
+            logger.info('set level succeeded')
             return HttpResponse(json.dumps({'code': 0}))
         except Exception as e:
-            print(e)
+            logger.error(e)
             return HttpResponse(json.dumps({'code': 1}))
 
 
@@ -54,16 +59,19 @@ def set_word_limit(request):
         try:
             limit = request.POST.get('word_limit', '')
         except Exception as e:
-            print(e)
+            logger.error('get word limit failed')
+            logger.error(e)
             return HttpResponse(json.dumps({'code': 1}))
 
         if limit == '':
+            logger.error('word limit is blank')
             return HttpResponse(json.dumps({'code': 1}))
 
         try:
             limit = int(limit)
         except Exception as e:
-            print(e)
+            logger.error('word limit is not int')
+            logger.error(e)
             return HttpResponse(json.dumps({'code': 1}))
 
         if limit not in [20, 50, 70, 100]:
@@ -72,48 +80,57 @@ def set_word_limit(request):
         try:
             request.user.word_limit = limit
             request.user.save()
-            return render(request, 'crawfish/index.html')
+            logger.info('set word limit succeeded')
+            return HttpResponseRedirect('/index')
         except Exception as e:
-            print(e)
+            logger.error(e)
             return HttpResponse(json.dumps({'code': 1}))
 
 
 @login_required
 def bdc(request):
+    if request.user.current_level is None:
+        return HttpResponseRedirect('/index/')
+
     user = request.user
     level = Level.objects.get(pk=user.current_level)
     offset = model_to_dict(user)[level.name.lower() + '_offset']
 
     # 完成一本书的学习
     if offset > LevelWord.objects.filter(level_id=level.id).count():
-        return HttpResponseRedirect('/finished_book')
+        return render(requests, 'crawfish/finished.html',
+                      {'msg': '你已经完成本数的学习'})
 
     word_ids = LevelWord.objects.filter(level_id=level.id)[
                offset: offset + user.word_limit]
-    # Don't support
-    # words = Word.objects.filter(pk__in=word_ids)
+
     words = []
+    others_notes = []
+    self_notes = []
     for word_id in word_ids:
         word = Word.objects.get(pk=word_id.word_id)
         words.append(
-            {'content': word.content, 'cn_definition': word.cn_definition})
+            {'content': word.content, 'cn_definition': word.cn_definition,
+             'word_id': word.id, 'shanbay_id': word.shanbay_id})
+        others_notes.append(list(map(model_to_dict, Note.objects.filter(
+            word_id=word.id).exclude(user_id=user.id))))
+        self_notes.append(list(map(model_to_dict,Note.objects.filter(
+            word_id=word.id, user_id=user.id))))
 
-    return render(request, 'crawfish/bdc.html', {'words': words})
+    return render(request, 'crawfish/bdc.html', {'words': words,
+                                                 'others_notes': others_notes,
+                                                 'self_notes': self_notes})
 
 
 # 一个问题，本来想在前端用ajax调用api来请求例句
-# 但是扇贝不提供jsonp格式的调用，我解决不了跨域问题，sad
+# 但是扇贝不提供jsonp格式的调用，解决不了跨域问题，sad
 @login_required
 def get_sentence(request):
-    # 啊！爬数据的页面只提供了单词和中文释义，没有单词的ID
-    # 拿例句就开始蛋疼了
-    word = request.GET.get('word')
-    data = requests.get('https://api.shanbay.com/bdc/search/?word=%s' % word)
-    if data.status_code == 200:
-        data = json.loads(data.text)
-        # 例句的api不能用了啊啊啊啊
+    try:
+        shanbay_id = request.GET.get('shanbay_id', '')
+        # 例句的api不能用
         # 只能爬页面然后分析了，这样页面写起来倒是简单了
-        url = 'https://www.shanbay.com/bdc/vocabulary/%s/' % data['data']['id']
+        url = 'https://www.shanbay.com/bdc/vocabulary/%s/' % shanbay_id
         page = requests.get(url)
         if page.status_code == 200:
             soup = BeautifulSoup(page.text, 'lxml')
@@ -121,54 +138,46 @@ def get_sentence(request):
             if hasattr(request.user, 'today'):
                 request.user.today += 1
             return HttpResponse(json.dumps({'sentence': sentence}))
+    except Exception as e:
+        logger.error(e)
 
 
 @login_required
 def finished_today(request):
-    user = request.user
-    level = Level.objects.get(pk=user.current_level).name.lower() + '_offset'
-    setattr(user, level, getattr(user, level) + user.word_limit)
-    user.save()
-    return render(request, 'crawfish/finished_today.html')
+    try:
+        user = request.user
+        level = Level.objects.get(pk=user.current_level).name.lower() + '_offset'
+        setattr(user, level, getattr(user, level) + user.word_limit)
+        user.save()
+        return render(request, 'crawfish/finished.html',
+                      {'msg': '你已经完成今天的学习'})
+    except Exception as e:
+        logger.error(e)
 
 
 @login_required
-@csrf_protect
+@csrf_exempt
 def add_note(request):
     word_id = request.POST.get('word_id', '')
     content = request.POST.get('content')
     user_id = request.user.id
+    user_name = request.user.email.split('@')[0]
 
     note = Note()
     note.user_id = user_id
     note.word_id = word_id
     note.content = content
+    note.user_name = user_name
     note.save()
 
-    # 添加笔记后 ，ajax在判断成功响应后，直接用前端内容异步append笔记，
-    return HttpResponse(json.dumps({'code': 0, 'note_id': note.id}))
+    return HttpResponse(json.dumps({'code': 0, 'note': {'id': note.id,
+                                                        'content': note.content}}))
+
 
 @login_required
-@csrf_protect
-def edit_note(request):
+@csrf_exempt
+def delete_note(request):
     note_id = request.POST.get('note_id', '')
-    content = request.POST.get('content', '')
-
-    Note.objects.get(pk=note_id).update(content=content)
-
-    # 添加笔记后 ，ajax在判断成功响应后，直接用前端内容异步append笔记，
+    Note.objects.get(pk=note_id).delete()
     return HttpResponse(json.dumps({'code': 0, 'note_id': note_id}))
-
-
-
-'''
-近义词eb4e57bb2c34032da68dfeb3a0578b68
-'''
-
-# TODO
-# 返回的数据增加单词id, 扇贝id
-# 笔记增删查改
-# logout
-# 开始学习有bug
-# django日志
 
