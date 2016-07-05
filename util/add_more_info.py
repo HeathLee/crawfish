@@ -14,7 +14,7 @@ import django
 django.setup()
 
 from crawfish.models import Word
-from django.db import transaction
+
 
 count = 1903
 all = Word.objects.all().count()
