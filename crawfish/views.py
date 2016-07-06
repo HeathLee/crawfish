@@ -130,7 +130,7 @@ def get_sentence(request):
         shanbay_id = request.GET.get('shanbay_id', '')
         # 例句的api不能用
         # 只能爬页面然后分析了，这样页面写起来倒是简单了
-        url = 'https://www.shanbay.com/bdc/vocabulary/%s/' % shanbay_id
+        url = 'https://www.shanbay.com/bdc/vocabulary/%s/' % str(shanbay_id)
         page = requests.get(url)
         if page.status_code == 200:
             soup = BeautifulSoup(page.text, 'lxml')

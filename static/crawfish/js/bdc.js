@@ -69,7 +69,7 @@
         }
 
 
-        $.get('/get_sentences/?shanbay_id=' + word['shanbay_id'], function (response) {
+        $.get('/get_sentence/?shanbay_id=' + word['shanbay_id'], function (response) {
             if (response != null) {
                 $('#affix').after(response["sentence"])
             }
